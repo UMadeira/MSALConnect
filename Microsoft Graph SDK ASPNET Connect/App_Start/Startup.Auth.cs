@@ -42,7 +42,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
                     // The `Scope` describes the permissions that your app will need. 
                     // See https://azure.microsoft.com/documentation/articles/active-directory-v2-scopes/                    
                     ClientId = appId,
-                    Authority = "https://login.microsoftonline.com/common/v2.0",
+                    Authority ="https://login.microsoftonline.com/46ef5cdb-dbbe-4e24-92b1-275eb2ba045b/v2.0", // "https://login.microsoftonline.com/common/v2.0",
                     PostLogoutRedirectUri = redirectUri,
                     RedirectUri = redirectUri,
                     Scope = "openid email profile offline_access " + graphScopes,
