@@ -6,6 +6,7 @@
 using Resources;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 // Microsoft.Graph
@@ -112,6 +113,55 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
                     }
                 }
             }
+        }
+        public async Task<byte[]> GetPhoto(string accessToken)
+        {
+            string endpoint = "https://graph.microsoft.com/v1.0/me/photo/$value";
+
+            using (var client = new HttpClient())
+            {
+                using (var request = new HttpRequestMessage( HttpMethod.Get, endpoint ))
+                {
+                    request.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( "image/jpeg" ) );
+                    request.Headers.Authorization=new AuthenticationHeaderValue( "Bearer", accessToken );
+                    using (HttpResponseMessage response = await client.SendAsync( request ))
+                    {
+                        if (response.StatusCode==HttpStatusCode.OK)
+                        {
+                            if (response.Content.Headers.ContentType.MediaType=="image/jpeg")
+                            {
+                                return await response.Content.ReadAsByteArrayAsync();
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public async Task<byte[]> GetUserPhoto( string accessToken, string user)
+        {
+            string endpoint = $"https://graph.microsoft.com/v1.0/users/{user}/photo/$value";
+
+            using (var client = new HttpClient())
+            {
+                using (var request = new HttpRequestMessage( HttpMethod.Get, endpoint ))
+                {
+                    request.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( "image/jpeg" ) );
+                    request.Headers.Authorization=new AuthenticationHeaderValue( "Bearer", accessToken );
+                    using (HttpResponseMessage response = await client.SendAsync( request ))
+                    {
+                        if (response.StatusCode==HttpStatusCode.OK)
+                        {
+                            if (response.Content.Headers.ContentType.MediaType=="image/jpeg")
+                            {
+                                return await response.Content.ReadAsByteArrayAsync();
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
         }
 
         // Send an email message from the current user.

@@ -160,6 +160,42 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get Photo.
+        /// </summary>
+        internal static string Graph_GetPhoto_Button {
+            get {
+                return ResourceManager.GetString("Graph_GetPhoto_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get Photo.
+        /// </summary>
+        internal static string Graph_GetPhoto_Heading {
+            get {
+                return ResourceManager.GetString("Graph_GetPhoto_Heading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the &lt;b&gt;Get Photo&lt;/b&gt; button to get the current user&apos;s photo:.
+        /// </summary>
+        internal static string Graph_GetPhoto_Instruction {
+            get {
+                return ResourceManager.GetString("Graph_GetPhoto_Instruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current user&apos;s photo.
+        /// </summary>
+        internal static string Graph_GetPhoto_Result_Label {
+            get {
+                return ResourceManager.GetString("Graph_GetPhoto_Result_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;
         ///&lt;meta http-equiv=&apos;Content-Type&apos; content=&apos;text/html; charset=us-ascii&apos;&gt;
         ///&lt;title&gt;&lt;/title&gt;
@@ -168,7 +204,7 @@ namespace Resources {
         ///&lt;h2&gt;Congratulations!&lt;/h2&gt;
         ///&lt;p&gt;This is a message from the Microsoft Graph Connect sample. You are well on your way to incorporating Office 365 services in your apps.&lt;/p&gt;
         ///&lt;h3&gt;What&apos;s next?&lt;/h3&gt;&lt;ul&gt;
-        ///&lt;li&gt;Check out &lt;a href=&apos;http://dev.office.com&apos;&gt;dev.office.com&lt;/a&gt; to start building Office 365 apps today with all the latest tools, templates, and guidance to get star [rest of string was truncated]&quot;;.
+        ///&lt;li&gt;Check out &lt;a href=&apos;http://dev.office.com&apos;&gt;dev.office.com&lt;/a&gt; to start building Office 365 apps today with all the latest tools, templates, and guidance to get started quic [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Graph_SendMail_Body_Content {
             get {

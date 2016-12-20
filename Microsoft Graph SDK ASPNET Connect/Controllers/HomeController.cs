@@ -110,6 +110,26 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
         }
 
         [Authorize]
+        // Get the current user's email address from their profile.
+        public async Task<ActionResult> GetPhoto()
+        {
+            try
+            {
+                // Get an access token.
+                string accessToken = await SampleAuthProvider.Instance.GetUserAccessTokenAsync();
+
+                // Get the current user's email address. 
+                ViewBag.Stream = await GraphService.GetUserPhoto( accessToken, "duarte.costa@staff.uma.pt" );
+                return View( "Graph" );
+            }
+            catch (Exception e)
+            {
+                if (e.Message==Resource.Error_AuthChallengeNeeded) return new EmptyResult();
+                return RedirectToAction( "Index", "Error", new { message = Resource.Error_Message+Request.RawUrl+": "+e.Message } );
+            }
+        }
+
+        [Authorize]
         // Send mail on behalf of the current user.
         public async Task<ActionResult> SendEmail()
         {

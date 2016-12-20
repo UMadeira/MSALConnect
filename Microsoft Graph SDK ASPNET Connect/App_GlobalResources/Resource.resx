@@ -161,6 +161,18 @@
     <value>Current user's email address</value>
     <comment>Label for email address result in Graph view</comment>
   </data>
+  <data name="Graph_GetPhoto_Button" xml:space="preserve">
+    <value>Get Photo</value>
+  </data>
+  <data name="Graph_GetPhoto_Heading" xml:space="preserve">
+    <value>Get Photo</value>
+  </data>
+  <data name="Graph_GetPhoto_Instruction" xml:space="preserve">
+    <value>Choose the &lt;b&gt;Get Photo&lt;/b&gt; button to get the current user's photo:</value>
+  </data>
+  <data name="Graph_GetPhoto_Result_Label" xml:space="preserve">
+    <value>Current user's photo</value>
+  </data>
   <data name="Graph_SendMail_Body_Content" xml:space="preserve">
     <value>&lt;html&gt;&lt;head&gt;
 &lt;meta http-equiv='Content-Type' content='text/html; charset=us-ascii'&gt;
