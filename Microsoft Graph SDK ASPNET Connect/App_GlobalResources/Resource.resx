@@ -246,6 +246,10 @@ log an issue&lt;/a&gt; on our repository. &lt;/p&gt;&lt;p&gt;For general questio
     <value>Home</value>
     <comment>Link to Home page</comment>
   </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Photo</value>
+    <comment>Link to Home.GetPhoto</comment>
+  </data>
   <data name="SignIn" xml:space="preserve">
     <value>Sign in with Microsoft</value>
     <comment>Link to Account.SignIn action</comment>

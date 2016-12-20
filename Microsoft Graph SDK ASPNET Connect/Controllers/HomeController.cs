@@ -120,8 +120,9 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 string accessToken = await SampleAuthProvider.Instance.GetUserAccessTokenAsync();
 
                 // Get the current user's email address. 
-                ViewBag.Stream = await GraphService.GetUserPhoto( accessToken, "duarte.costa@staff.uma.pt" );
-                return View( "Graph" );
+//                ViewBag.Stream = await GraphService.GetUserPhoto( accessToken, "duarte.costa@staff.uma.pt" );
+                ViewBag.Stream = await GraphService.GetPhoto( accessToken );
+                return View( "Photo" );
             }
             catch (Exception e)
             {

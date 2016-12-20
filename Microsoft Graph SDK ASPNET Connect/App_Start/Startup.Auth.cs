@@ -31,49 +31,60 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
         
         public void ConfigureAuth(IAppBuilder app)
         {
-         app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+            app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
-    app.UseCookieAuthentication(new CookieAuthenticationOptions());
-
-    app.UseOpenIdConnectAuthentication(
-        new OpenIdConnectAuthenticationOptions
-        {
-
-            // The `Authority` represents the Microsoft v2.0 authentication and authorization service.
-            // The `Scope` describes the permissions that your app will need. 
-            // See https://azure.microsoft.com/documentation/articles/active-directory-v2-scopes/                    
-            ClientId = appId,
-            Authority = "https://login.microsoftonline.com/common/v2.0",
-            PostLogoutRedirectUri = redirectUri,
-            RedirectUri = redirectUri,
-            Scope = "openid email profile offline_access " + graphScopes,
-            TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = false
-            },
-            Notifications = new OpenIdConnectAuthenticationNotifications
-            {
-                AuthorizationCodeReceived = async (context) =>
+            app.UseOpenIdConnectAuthentication(
+                new OpenIdConnectAuthenticationOptions
                 {
-                    var code = context.Code;
-                    string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
-                    ConfidentialClientApplication cca = new ConfidentialClientApplication(
-                        appId, 
-                        redirectUri,
-                        new ClientCredential(appSecret),
-                        new SessionTokenCache(signedInUserID, context.OwinContext.Environment["System.Web.HttpContextBase"] as HttpContextBase));
-                        string[] scopes = graphScopes.Split(new char[] { ' ' });
 
-                    AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
-                },
-                AuthenticationFailed = (context) =>
-                {
-                    context.HandleResponse();
-                    context.Response.Redirect("/Error?message=" + context.Exception.Message);
-                    return Task.FromResult(0);
-                }
-            }
-        });
+                    // The `Authority` represents the Microsoft v2.0 authentication and authorization service.
+                    // The `Scope` describes the permissions that your app will need. 
+                    // See https://azure.microsoft.com/documentation/articles/active-directory-v2-scopes/                    
+                    ClientId = appId,
+                    Authority = "https://login.microsoftonline.com/common/v2.0",
+                    PostLogoutRedirectUri = redirectUri,
+                    RedirectUri = redirectUri,
+                    Scope = "openid email profile offline_access " + graphScopes,
+                    TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false
+                    },
+                    Notifications = new OpenIdConnectAuthenticationNotifications
+                    {
+                        AuthorizationCodeReceived = async (context) =>
+                        {
+                            var code = context.Code;
+                            string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                            ConfidentialClientApplication cca = new ConfidentialClientApplication(
+                                appId, 
+                                redirectUri,
+                                new ClientCredential(appSecret),
+                                new SessionTokenCache(signedInUserID, context.OwinContext.Environment["System.Web.HttpContextBase"] as HttpContextBase));
+                                string[] scopes = graphScopes.Split(new char[] { ' ' });
+
+                            AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
+                        },
+                        AuthenticationFailed = (context) =>
+                        {
+                            context.HandleResponse();
+                            context.Response.Redirect("/Error?message=" + context.Exception.Message);
+                            return Task.FromResult(0);
+                        },
+                        MessageReceived = ( context ) => {
+                            return Task.FromResult(0);
+                        },
+                        RedirectToIdentityProvider = ( context ) => {
+                            return Task.FromResult(0);
+                        },
+                        SecurityTokenReceived = ( context ) => {
+                            return Task.FromResult(0);
+                        },
+                        SecurityTokenValidated = ( context ) => {
+                            return Task.FromResult(0);
+                        }
+                    }
+                });
 }
     }
 }

@@ -208,6 +208,8 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Graph.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\SignOutCallback.cshtml" />
+    <Content Include="Views\Home\Photo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -26,6 +26,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             }
         }
 
+        // BUGBUG: Ending a session with the v2.0 endpoint is not yet supported.  Here, we just end the session with the web app
         // Here we just clear the token cache, sign out the GraphServiceClient, and end the session with the web app.  
         public void SignOut()
         {
@@ -38,10 +39,21 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 tokenCache.Clear(userObjectId);
             }
 
-            //SDKHelper.SignOutClient();
+            string callbackUrl = Url.Action( "SignOutCallback", "Account", routeValues: null, protocol: Request.Url.Scheme );
 
-            // Send an OpenID Connect sign-out request. 
-            HttpContext.GetOwinContext().Authentication.SignOut( CookieAuthenticationDefaults.AuthenticationType); Response.Redirect("/");
+            HttpContext.GetOwinContext().Authentication.SignOut(
+                    new AuthenticationProperties { RedirectUri = callbackUrl }, OpenIdConnectAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType );
+        }
+
+        public ActionResult SignOutCallback()
+        {
+            if ( Request.IsAuthenticated )
+            {
+                // Redirect to home page if the user is authenticated.
+                return RedirectToAction( "Index", "Home" );
+            }
+
+            return View();
         }
     }
 }
