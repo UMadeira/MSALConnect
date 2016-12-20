@@ -20,6 +20,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
     {
         public GraphService GraphService { get; } = new GraphService();
 
+        [Authorize]
         public ActionResult Index()
         {
             return View("Graph");
