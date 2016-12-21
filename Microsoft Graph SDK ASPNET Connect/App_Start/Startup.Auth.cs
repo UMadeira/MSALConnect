@@ -14,6 +14,7 @@ using Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage;
 using System.IdentityModel.Tokens;
 using System.IdentityModel.Claims;
 using Microsoft.Identity.Client;
+using Microsoft_Graph_SDK_ASPNET_Connect.Models;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect
 {
@@ -24,28 +25,31 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
         // The appSecret is the application's password.
         // The redirectUri is where users are redirected after sign in and consent.
         // The graphScopes are the Microsoft Graph permission scopes that are used by this sample: User.Read Mail.Send
-        private static string appId = ConfigurationManager.AppSettings["ida:AppId"];
-        private static string appSecret = ConfigurationManager.AppSettings["ida:AppSecret"];
-        private static string redirectUri = ConfigurationManager.AppSettings["ida:RedirectUri"];
-        private static string graphScopes = ConfigurationManager.AppSettings["ida:GraphScopes"];
+
+        private static readonly string TenantId    = ConfigurationManager.AppSettings["ida:TenantId"];
+        private static readonly string AppId       = ConfigurationManager.AppSettings["ida:AppId"];
+        private static readonly string AppSecret   = ConfigurationManager.AppSettings["ida:AppSecret"];
+        private static readonly string RedirectUri = ConfigurationManager.AppSettings["ida:RedirectUri"];
+        private static readonly string GraphScopes = ConfigurationManager.AppSettings["ida:GraphScopes"];
         
-        public void ConfigureAuth(IAppBuilder app)
+        public void ConfigureAuth( IAppBuilder app )
         {
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
             app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
             app.UseOpenIdConnectAuthentication(
-                new OpenIdConnectAuthenticationOptions
-                {
+                new OpenIdConnectAuthenticationOptions {
 
                     // The `Authority` represents the Microsoft v2.0 authentication and authorization service.
                     // The `Scope` describes the permissions that your app will need. 
                     // See https://azure.microsoft.com/documentation/articles/active-directory-v2-scopes/                    
-                    ClientId = appId,
-                    Authority ="https://login.microsoftonline.com/46ef5cdb-dbbe-4e24-92b1-275eb2ba045b/v2.0", // "https://login.microsoftonline.com/common/v2.0",
-                    PostLogoutRedirectUri = redirectUri,
-                    RedirectUri = redirectUri,
-                    Scope = "openid email profile offline_access " + graphScopes,
+
+                    ClientId              = AppId,
+                    Authority             = $"https://login.microsoftonline.com/{TenantId}/v2.0", 
+                    PostLogoutRedirectUri = RedirectUri,
+                    RedirectUri           = RedirectUri,
+                    Scope = "openid email profile offline_access " + GraphScopes,
+
                     TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false
@@ -57,11 +61,8 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
                             var code = context.Code;
                             string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
                             ConfidentialClientApplication cca = new ConfidentialClientApplication(
-                                appId, 
-                                redirectUri,
-                                new ClientCredential(appSecret),
-                                new SessionTokenCache(signedInUserID, context.OwinContext.Environment["System.Web.HttpContextBase"] as HttpContextBase));
-                                string[] scopes = graphScopes.Split(new char[] { ' ' });
+                                AppId, RedirectUri, new ClientCredential(AppSecret), new SessionTokenCache( signedInUserID ) );
+                                string[] scopes = GraphScopes.Split( new char[] { ' ' } );
 
                             AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
                         },
@@ -70,21 +71,9 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
                             context.HandleResponse();
                             context.Response.Redirect("/Error?message=" + context.Exception.Message);
                             return Task.FromResult(0);
-                        },
-                        MessageReceived = ( context ) => {
-                            return Task.FromResult(0);
-                        },
-                        RedirectToIdentityProvider = ( context ) => {
-                            return Task.FromResult(0);
-                        },
-                        SecurityTokenReceived = ( context ) => {
-                            return Task.FromResult(0);
-                        },
-                        SecurityTokenValidated = ( context ) => {
-                            return Task.FromResult(0);
                         }
                     }
-                });
-}
+                } );
+        }
     }
 }
