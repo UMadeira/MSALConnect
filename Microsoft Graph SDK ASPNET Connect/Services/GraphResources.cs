@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
+namespace Microsoft_Graph_SDK_ASPNET_Connect.Services
 {
     public class UserInfo
     {

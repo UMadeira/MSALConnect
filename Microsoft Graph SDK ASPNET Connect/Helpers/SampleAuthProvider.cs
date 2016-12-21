@@ -28,7 +28,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Helpers
         private string appId = ConfigurationManager.AppSettings["ida:AppId"];
         private string appSecret = ConfigurationManager.AppSettings["ida:AppSecret"];
         private string scopes = ConfigurationManager.AppSettings["ida:GraphScopes"];
-        private SessionTokenCache TokenCache { get; set; }
+        private UserTokenCache TokenCache { get; set; }
 
         private static readonly SampleAuthProvider instance = new SampleAuthProvider();
         private SampleAuthProvider() { } 
@@ -46,7 +46,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Helpers
         {
             string signedInUserID = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            TokenCache = new SessionTokenCache( signedInUserID );
+            TokenCache = new UserTokenCache( signedInUserID );
 
             #if DEBUG
             var cachedItems = TokenCache.ReadItems(appId); // see what's in the cache

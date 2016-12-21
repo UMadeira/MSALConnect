@@ -35,7 +35,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
                 // Get the user's token cache and clear it.
                 string userObjectId = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                SessionTokenCache tokenCache = new SessionTokenCache( userObjectId );
+                UserTokenCache tokenCache = new UserTokenCache( userObjectId );
                 tokenCache.Clear(userObjectId);
             }
 

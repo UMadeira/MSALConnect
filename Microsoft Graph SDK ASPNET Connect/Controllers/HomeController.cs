@@ -7,7 +7,7 @@ using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft_Graph_SDK_ASPNET_Connect.Helpers;
-using Microsoft_Graph_SDK_ASPNET_Connect.Models;
+using Microsoft_Graph_SDK_ASPNET_Connect.Services;
 using Resources;
 
 #if GRAPH

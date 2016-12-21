@@ -14,7 +14,6 @@ using Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage;
 using System.IdentityModel.Tokens;
 using System.IdentityModel.Claims;
 using Microsoft.Identity.Client;
-using Microsoft_Graph_SDK_ASPNET_Connect.Models;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect
 {
@@ -63,7 +62,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
                             var code = context.Code;
                             string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
                             ConfidentialClientApplication cca = new ConfidentialClientApplication(
-                                AppId, RedirectUri, new ClientCredential(AppSecret), new SessionTokenCache( signedInUserID ) );
+                                AppId, RedirectUri, new ClientCredential(AppSecret), new UserTokenCache( signedInUserID ) );
                                 string[] scopes = GraphScopes.Split( new char[] { ' ' } );
 
                             AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
