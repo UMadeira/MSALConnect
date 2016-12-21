@@ -197,6 +197,10 @@
     <Compile Include="Models\UserTokenCache.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\TokensCache.mdf" />
+    <Content Include="App_Data\TokensCache_log.ldf">
+      <DependentUpon>TokensCache.mdf</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -239,6 +243,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

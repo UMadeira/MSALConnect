@@ -6,13 +6,9 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
 
     public class UserTokenCacheDb : DbContext
     {
-        // Your context has been configured to use a 'AuthTokens' connection string from your application's 
-        // configuration file (App.config or Web.config). By default, this connection string targets the 
-        // 'Microsoft_Graph_SDK_ASPNET_Connect.Models.AuthTokens' database on your LocalDb instance. 
-        // 
         // If you wish to target a different database and/or database provider, modify the 'AuthTokens' 
         // connection string in the application configuration file.
-        public UserTokenCacheDb() : base( "DefaultConnection" )
+        public UserTokenCacheDb() : base( "name=TokensCacheConnection" )
         {
         }
 
@@ -21,10 +17,4 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
 
         public virtual DbSet<UserTokenCache> TokenCaches { get; set; }
     }
-
-    //public class MyEntity
-    //{
-    //    public int Id { get; set; }
-    //    public string Name { get; set; }
-    //}
 }

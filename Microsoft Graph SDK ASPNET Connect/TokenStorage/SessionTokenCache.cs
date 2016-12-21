@@ -40,12 +40,13 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
             {
                 if ( Cache == null )
                 {
-                    Cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId==UserUniqueId );
+                    Cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == UserUniqueId );
                 }
                 else
                 {
                     // Retrieve last write from the DB
-                    var status = from e in db.TokenCaches where ( e.UserUniqueId == UserUniqueId )
+                    var status = from e in db.TokenCaches
+                                 where ( e.UserUniqueId == UserUniqueId )
                                  select new { LastWrite = e.LastWrite };
 
                     // If the in-memory copy is older than the persistent copy
@@ -68,15 +69,16 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
 
             lock (FileLock)
             {
-                Cache = new UserTokenCache() {
+                Cache = new UserTokenCache()
+                {
                     UserUniqueId = UserUniqueId,
                     CacheBits = MachineKey.Protect( Serialize(), "MSALCache" ),
                     LastWrite = DateTime.Now
                 };
 
-                db.Entry(Cache).State = EntityState.Added;
+                db.Entry( Cache ).State = EntityState.Added;
                 db.SaveChanges();
- 
+
                 // After the write operation takes place, restore the HasStateChanged bit to false.
                 HasStateChanged = false;
             }
@@ -86,7 +88,6 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
         public override void Clear( string aClientId )
         {
             base.Clear(aClientId);
-            //context.Session.Remove(CacheId);
 
             var cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == UserUniqueId );
             if ( cache != null )

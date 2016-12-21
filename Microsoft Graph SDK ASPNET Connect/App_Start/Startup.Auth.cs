@@ -34,6 +34,8 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
         
         public void ConfigureAuth( IAppBuilder app )
         {
+            var authority = "https://login.microsoftonline.com/" + TenantId + "/v2.0";
+
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
             app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
@@ -45,7 +47,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
                     // See https://azure.microsoft.com/documentation/articles/active-directory-v2-scopes/                    
 
                     ClientId              = AppId,
-                    Authority             = $"https://login.microsoftonline.com/{TenantId}/v2.0", 
+                    Authority             = authority,
                     PostLogoutRedirectUri = RedirectUri,
                     RedirectUri           = RedirectUri,
                     Scope = "openid email profile offline_access " + GraphScopes,
