@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
+namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
 {
-    public class UserTokenCache
+    public class UserTokenCacheEntry
     {
         [Key]
         public int UserTokenCacheId { get; set; }

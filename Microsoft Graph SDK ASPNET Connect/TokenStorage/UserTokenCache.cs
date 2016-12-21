@@ -9,23 +9,22 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using Microsoft.Identity.Client;
-using Microsoft_Graph_SDK_ASPNET_Connect.Models;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
 {
 
     // Store the user's token information.
-    public class SessionTokenCache : TokenCache
+    public class UserTokenCache : TokenCache
     {
         private static readonly object FileLock = new object();
-        public string UserUniqueId = string.Empty;
+        private readonly string mUserUniqueId;
 
         private UserTokenCacheDb db = new UserTokenCacheDb();
-        private UserTokenCache Cache;
+        private UserTokenCacheEntry mCacheEntry;
 
-        public SessionTokenCache( string aUserUniqueId )
+        public UserTokenCache( string aUserUniqueId )
         {
-            this.UserUniqueId = aUserUniqueId;
+            mUserUniqueId = aUserUniqueId;
 
             AfterAccess  = AfterAccessNotification;
             BeforeAccess = BeforeAccessNotification;
@@ -38,27 +37,27 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
         {
             lock ( FileLock )
             {
-                if ( Cache == null )
+                if ( mCacheEntry == null )
                 {
-                    Cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == UserUniqueId );
+                    mCacheEntry = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == mUserUniqueId );
                 }
                 else
                 {
                     // Retrieve last write from the DB
                     var status = from e in db.TokenCaches
-                                 where ( e.UserUniqueId == UserUniqueId )
+                                 where ( e.UserUniqueId == mUserUniqueId )
                                  select new { LastWrite = e.LastWrite };
 
                     // If the in-memory copy is older than the persistent copy
-                    if ( status.First().LastWrite > Cache.LastWrite )
+                    if ( status.First().LastWrite > mCacheEntry.LastWrite )
                     {
                         // Read from from storage, update in-memory copy
-                        Cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == UserUniqueId );
+                        mCacheEntry = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == mUserUniqueId );
                     }
                 }
-                if ( Cache != null )
+                if ( mCacheEntry != null )
                 {
-                    this.Deserialize( MachineKey.Unprotect( Cache.CacheBits, "MSALCache" ) );
+                    this.Deserialize( MachineKey.Unprotect( mCacheEntry.CacheBits, "MSALCache" ) );
                 }
             }
         }
@@ -69,14 +68,14 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
 
             lock (FileLock)
             {
-                Cache = new UserTokenCache()
+                mCacheEntry = new UserTokenCacheEntry()
                 {
-                    UserUniqueId = UserUniqueId,
+                    UserUniqueId = mUserUniqueId,
                     CacheBits = MachineKey.Protect( Serialize(), "MSALCache" ),
                     LastWrite = DateTime.Now
                 };
 
-                db.Entry( Cache ).State = EntityState.Added;
+                db.Entry( mCacheEntry ).State = EntityState.Added;
                 db.SaveChanges();
 
                 // After the write operation takes place, restore the HasStateChanged bit to false.
@@ -89,7 +88,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
         {
             base.Clear(aClientId);
 
-            var cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == UserUniqueId );
+            var cache = db.TokenCaches.FirstOrDefault( c => c.UserUniqueId == mUserUniqueId );
             if ( cache != null )
             {
                 db.TokenCaches.Remove( cache );
@@ -107,12 +106,12 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
         // Triggered right after ADAL accessed the cache.
         private void AfterAccessNotification( TokenCacheNotificationArgs args )
         {
-            // if the access operation resulted in a cache update
-            if ( HasStateChanged )
-            {
-                Persist();
-            }
+            // If the access operation resulted in a cache update
+            if ( ! HasStateChanged ) return;
+
+            Persist();
         }
+
         private void BeforeWriteNotification(TokenCacheNotificationArgs args)
         {
         }

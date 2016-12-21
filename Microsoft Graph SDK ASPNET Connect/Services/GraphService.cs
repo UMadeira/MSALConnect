@@ -3,30 +3,26 @@
 *  See LICENSE in the source repository root for complete license information. 
 */
 
-using Resources;
+// Microsoft.Graph
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
-
-// Microsoft.Graph
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Resources;
 #if GRAPH
 
 using Microsoft.Graph;
 
 #elif REST
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-
 #endif
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
+namespace Microsoft_Graph_SDK_ASPNET_Connect.Services
 {
     public class GraphService
     {

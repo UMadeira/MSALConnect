@@ -6,8 +6,8 @@
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft_Graph_SDK_ASPNET_Connect.Helpers;
-using Microsoft_Graph_SDK_ASPNET_Connect.Models;
+using Microsoft_Graph_SDK_ASPNET_Connect.Services;
+using Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage;
 using Resources;
 
 #if GRAPH
@@ -43,7 +43,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
 
                 // Initialize the GraphServiceClient.
-                GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
+                GraphServiceClient graphClient = GraphServiceHelper.GetAuthenticatedClient();
 
                 // Get the current user's email address. 
                 ViewBag.Email = await mGraphService.GetMyEmailAddress(graphClient);
@@ -72,7 +72,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
 
                 // Initialize the GraphServiceClient.
-                GraphServiceClient graphClient = SDKHelper.GetAuthenticatedClient();
+                GraphServiceClient graphClient = GraphServiceHelper.GetAuthenticatedClient();
 
                 // Send the email.
                 await mGraphService.SendEmail(graphClient, message);
@@ -97,7 +97,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             try
             {
                 // Get an access token.
-                string accessToken = await SampleAuthProvider.Instance.GetUserAccessTokenAsync();
+                string accessToken = await UserTokenProvider.Instance.GetUserAccessTokenAsync();
 
                 // Get the current user's email address. 
                 ViewBag.Email = await GraphService.GetMyEmailAddress(accessToken);
@@ -117,7 +117,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             try
             {
                 // Get an access token.
-                string accessToken = await SampleAuthProvider.Instance.GetUserAccessTokenAsync();
+                string accessToken = await UserTokenProvider.Instance.GetUserAccessTokenAsync();
 
                 // Get the current user's email address. 
                 ViewBag.Stream = await GraphService.GetPhoto( accessToken );
@@ -146,7 +146,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Controllers
             {
 
                 // Get an access token.
-                string accessToken = await SampleAuthProvider.Instance.GetUserAccessTokenAsync();
+                string accessToken = await UserTokenProvider.Instance.GetUserAccessTokenAsync();
 
                 // Send the email.
                 ViewBag.Message = await GraphService.SendEmail(accessToken, email);
