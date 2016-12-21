@@ -1,0 +1,22 @@
+﻿
+<!--  Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+        See LICENSE in the source repository root for complete license information. -->
+@using MSALConnect.App_GlobalResources
+@using Resources
+@{
+    ViewBag.Title = Resource.App_Name;
+}
+<h1>@ViewBag.Title</h1>
+<h2>@Resource.Graph_GetPhoto_Heading</h2>
+
+<div class="col-sm-12">
+    <label for="aUser-email-address">@Resource.Graph_GetPhoto_Result_Label</label>
+    @if ( ViewData.ContainsKey( "Stream" ) && ( ViewData["Stream"] != null ) )
+    {
+        <img src="@String.Format("data:image;base64,{0}", Convert.ToBase64String( ViewData["Stream"] as byte[]))" />
+    }
+    else
+    {
+        <p>No image...</p>
+    }
+</div>
