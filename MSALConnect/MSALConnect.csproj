@@ -188,10 +188,10 @@
     </Compile>
     <Compile Include="Services\EmailMessageBuilder.cs" />
     <Compile Include="Services\GraphService.cs" />
-    <Compile Include="Services\GraphServiceGraph.cs">
+    <Compile Include="Services\GraphService.Graph.cs">
       <DependentUpon>GraphService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Services\GraphServiceREST.cs">
+    <Compile Include="Services\GraphService.REST.cs">
       <DependentUpon>GraphService.cs</DependentUpon>
     </Compile>
     <Compile Include="Services\IGraphService.cs" />
