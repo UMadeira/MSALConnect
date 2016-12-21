@@ -46,9 +46,7 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect.Helpers
         {
             string signedInUserID = ClaimsPrincipal.Current.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            TokenCache = new SessionTokenCache(
-                signedInUserID, 
-                HttpContext.Current.GetOwinContext().Environment["System.Web.HttpContextBase"] as HttpContextBase);
+            TokenCache = new SessionTokenCache( signedInUserID );
 
             #if DEBUG
             var cachedItems = TokenCache.ReadItems(appId); // see what's in the cache

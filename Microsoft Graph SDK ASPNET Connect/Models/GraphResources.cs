@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Microsoft_Graph_SDK_ASPNET_Connect.Models
 {
-public class UserInfo
+    public class UserInfo
     {
         public string Address { get; set; }
     }
