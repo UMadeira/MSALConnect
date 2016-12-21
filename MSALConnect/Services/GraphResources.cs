@@ -25,7 +25,12 @@ namespace MSALConnect.Services
         public string Content { get; set; }
     }
 
-    public class MessageRequest
+    public interface IMessageRequest {
+        Message Message { get; set; }
+        bool SaveToSentItems { get; set; }
+    }
+
+    public class MessageRequest : IMessageRequest
     {
         public Message Message { get; set; }
         public bool SaveToSentItems { get; set; }

@@ -10,7 +10,7 @@
 <h2>@Resource.Graph_GetPhoto_Heading</h2>
 
 <div class="col-sm-12">
-    <label for="user-email-address">@Resource.Graph_GetPhoto_Result_Label</label>
+    <label for="aUser-email-address">@Resource.Graph_GetPhoto_Result_Label</label>
     @if ( ViewData.ContainsKey( "Stream" ) && ( ViewData["Stream"] != null ) )
     {
         <img src="@String.Format("data:image;base64,{0}", Convert.ToBase64String( ViewData["Stream"] as byte[]))" />

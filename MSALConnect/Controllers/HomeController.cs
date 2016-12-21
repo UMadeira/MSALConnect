@@ -3,23 +3,16 @@
 *  See LICENSE in the source repository root for complete license information. 
 */
 
-using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Graph;
 using MSALConnect.App_GlobalResources;
 using MSALConnect.Services;
-using MSALConnect.TokenStorage;
-
-#if GRAPH
-using Microsoft.Graph;
-#endif
 
 namespace MSALConnect.Controllers
 {
     public class HomeController : Controller
     {
-        public GraphService GraphService { get; } = new GraphService();
-
         [Authorize]
         public ActionResult Index()
         {
@@ -33,23 +26,17 @@ namespace MSALConnect.Controllers
             return View();
         }
 
-#if GRAPH
-
         [Authorize]
         // Get the current user's email address from their profile.
         public async Task<ActionResult> GetMyEmailAddress()
         {
             try
             {
-
-                // Initialize the GraphServiceClient.
-                GraphServiceClient graphClient = GraphServiceHelper.GetAuthenticatedClient();
-
                 // Get the current user's email address. 
-                ViewBag.Email = await mGraphService.GetMyEmailAddress(graphClient);
+                ViewBag.Email = await GraphService.Instance.GetMyEmailAddress();
                 return View("Graph");
             }
-            catch (ServiceException se)
+            catch ( ServiceException se )
             {
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
@@ -60,26 +47,25 @@ namespace MSALConnect.Controllers
         // Send mail on behalf of the current user.
         public async Task<ActionResult> SendEmail()
         {
-            if (string.IsNullOrEmpty(Request.Form["email-address"]))
+            if ( string.IsNullOrEmpty( Request.Form["email-address"] ) )
             {
                 ViewBag.Message = Resource.Graph_SendMail_Message_GetEmailFirst;
                 return View("Graph");
             }
 
-            // Build the email message.
-            Message message = mGraphService.BuildEmailMessage(Request.Form["recipients"], Request.Form["subject"]);
             try
             {
-
-                // Initialize the GraphServiceClient.
-                GraphServiceClient graphClient = GraphServiceHelper.GetAuthenticatedClient();
+                // Build the email message.
+                var message = EmailMessageBuilder.Build( 
+                    Request.Form["recipients"], Request.Form["subject"], Resource.Graph_SendMail_Body_Content );
 
                 // Send the email.
-                await mGraphService.SendEmail(graphClient, message);
+                await GraphService.Instance.SendEmail( message );
 
                 // Reset the current user's email address and the status to display when the page reloads.
                 ViewBag.Email = Request.Form["email-address"];
                 ViewBag.Message = Resource.Graph_SendMail_Success_Result;
+
                 return View("Graph");
             }
             catch (ServiceException se)
@@ -88,80 +74,5 @@ namespace MSALConnect.Controllers
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
            }
         }
-#elif REST
-
-        [Authorize]
-        // Get the current user's email address from their profile.
-        public async Task<ActionResult> GetMyEmailAddress()
-        {
-            try
-            {
-                // Get an access token.
-                string accessToken = await UserTokenProvider.Instance.GetUserAccessTokenAsync();
-
-                // Get the current user's email address. 
-                ViewBag.Email = await GraphService.GetMyEmailAddress(accessToken);
-                return View("Graph");
-            }
-            catch (Exception e)
-            {
-                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + e.Message });
-            }
-        }
-
-        [Authorize]
-        // Get the current user's email address from their profile.
-        public async Task<ActionResult> GetPhoto()
-        {
-            try
-            {
-                // Get an access token.
-                string accessToken = await UserTokenProvider.Instance.GetUserAccessTokenAsync();
-
-                // Get the current user's email address. 
-                ViewBag.Stream = await GraphService.GetPhoto( accessToken );
-                return View( "Photo" );
-            }
-            catch ( Exception e )
-            {
-                if ( e.Message == Resource.Error_AuthChallengeNeeded ) return new EmptyResult();
-                return RedirectToAction( "Index", "Error", new { message = Resource.Error_Message+Request.RawUrl+": "+e.Message } );
-            }
-        }
-
-        [Authorize]
-        // Send mail on behalf of the current user.
-        public async Task<ActionResult> SendEmail()
-        {
-            if (string.IsNullOrEmpty(Request.Form["email-address"]))
-            {
-                ViewBag.Message = Resource.Graph_SendMail_Message_GetEmailFirst;
-                return View("Graph");
-            }
-
-            // Build the email message.
-            MessageRequest email = GraphService.BuildEmailMessage(Request.Form["recipients"], Request.Form["subject"]);
-            try
-            {
-
-                // Get an access token.
-                string accessToken = await UserTokenProvider.Instance.GetUserAccessTokenAsync();
-
-                // Send the email.
-                ViewBag.Message = await GraphService.SendEmail(accessToken, email);
-
-                // Reset the current user's email address and the status to display when the page reloads.
-                ViewBag.Email = Request.Form["email-address"];
-                return View("Graph");
-            }
-            catch (Exception e)
-            {
-                if (e.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
-                return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + e.Message });
-            }
-        }
-
-#endif
     }
 }

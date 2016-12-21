@@ -32,7 +32,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;REST</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;GRAPH</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -186,12 +186,20 @@
     <Compile Include="Migrations\201612211131000_II.Designer.cs">
       <DependentUpon>201612211131000_II.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\EmailMessageBuilder.cs" />
+    <Compile Include="Services\GraphService.cs" />
+    <Compile Include="Services\GraphServiceGraph.cs">
+      <DependentUpon>GraphService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\GraphServiceREST.cs">
+      <DependentUpon>GraphService.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Services\IGraphService.cs" />
     <Compile Include="TokenStorage\IUserTokenProvider.cs" />
     <Compile Include="TokenStorage\UserTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Services\GraphServiceHelper.cs" />
     <Compile Include="Migrations\201612211050020_InitialCreate.cs" />
     <Compile Include="Migrations\201612211050020_InitialCreate.Designer.cs">
       <DependentUpon>201612211050020_InitialCreate.cs</DependentUpon>
@@ -203,7 +211,6 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="TokenStorage\UserTokenCacheDb.cs" />
     <Compile Include="Services\GraphResources.cs" />
-    <Compile Include="Services\GraphService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="TokenStorage\UserTokenCache.cs" />
