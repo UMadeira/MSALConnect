@@ -225,7 +225,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="App_GlobalResources\Content\Site.css" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Content Include="README.md" />
     <None Include="Scripts\_references.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
