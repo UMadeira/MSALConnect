@@ -60,10 +60,10 @@ namespace Microsoft_Graph_SDK_ASPNET_Connect
                         AuthorizationCodeReceived = async (context) =>
                         {
                             var code = context.Code;
-                            string signedInUserID = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                            string signedInUserId = context.AuthenticationTicket.Identity.FindFirst(ClaimTypes.NameIdentifier).Value;
                             ConfidentialClientApplication cca = new ConfidentialClientApplication(
-                                AppId, RedirectUri, new ClientCredential(AppSecret), new UserTokenCache( signedInUserID ) );
-                                string[] scopes = GraphScopes.Split( new char[] { ' ' } );
+                                AppId, RedirectUri, new ClientCredential(AppSecret), new UserTokenCache( signedInUserId ) );
+                            string[] scopes = GraphScopes.Split( new char[] { ' ' } );
 
                             AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(scopes, code);
                         },

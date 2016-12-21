@@ -179,15 +179,19 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Helpers\IAuthProvider.cs" />
-    <Compile Include="Helpers\SampleAuthProvider.cs" />
+    <Compile Include="Migrations\201612211131000_II.cs" />
+    <Compile Include="Migrations\201612211131000_II.Designer.cs">
+      <DependentUpon>201612211131000_II.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TokenStorage\IUserTokenProvider.cs" />
+    <Compile Include="TokenStorage\UserTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\SDKHelper.cs" />
+    <Compile Include="Services\GraphServiceHelper.cs" />
     <Compile Include="Migrations\201612211050020_InitialCreate.cs" />
     <Compile Include="Migrations\201612211050020_InitialCreate.Designer.cs">
       <DependentUpon>201612211050020_InitialCreate.cs</DependentUpon>
@@ -259,8 +263,12 @@
     <EmbeddedResource Include="Migrations\201612211105069_I.resx">
       <DependentUpon>201612211105069_I.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201612211131000_II.resx">
+      <DependentUpon>201612211131000_II.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Helpers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>

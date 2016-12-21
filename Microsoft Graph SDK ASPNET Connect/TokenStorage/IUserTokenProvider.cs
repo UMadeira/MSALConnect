@@ -5,9 +5,9 @@
 
 using System.Threading.Tasks;
 
-namespace Microsoft_Graph_SDK_ASPNET_Connect.Helpers
+namespace Microsoft_Graph_SDK_ASPNET_Connect.TokenStorage
 {
-    public interface IAuthProvider
+    public interface IUserTokenProvider
     {
         Task<string> GetUserAccessTokenAsync();
     }
