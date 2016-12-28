@@ -3,6 +3,7 @@
 *  See LICENSE in the source repository root for complete license information. 
 */
 
+using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Graph;
@@ -73,6 +74,23 @@ namespace MSALConnect.Controllers
                 if (se.Error.Message == Resource.Error_AuthChallengeNeeded) return new EmptyResult();
                 return RedirectToAction("Index", "Error", new { message = Resource.Error_Message + Request.RawUrl + ": " + se.Error.Message });
            }
+        }
+
+        [Authorize]
+        // Get the current user's email address from their profile.
+        public async Task<ActionResult> GetPhoto()
+        {
+            try
+            {
+                // Get the current user's email address. 
+                ViewBag.Stream = await GraphService.Instance.GetPhoto();
+                return View( "Photo" );
+            }
+            catch ( Exception e )
+            {
+                if ( e.Message == Resource.Error_AuthChallengeNeeded ) return new EmptyResult();
+                return RedirectToAction( "Index", "Error", new { message = Resource.Error_Message+Request.RawUrl+": "+e.Message } );
+            }
         }
     }
 }
